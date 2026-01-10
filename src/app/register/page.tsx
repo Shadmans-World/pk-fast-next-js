@@ -8,7 +8,7 @@ export default function Register() {
   return (
     <div>
       {
-        step ==1 ? <Welcome nextStep={setStep}/> : <RegisterForm/>
+        step ==1 ? <Welcome nextStep={setStep}/> : <RegisterForm previousStep = {setStep}/>
       }
       
     </div>
