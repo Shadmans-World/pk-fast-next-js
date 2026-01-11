@@ -1,3 +1,4 @@
+
 import {
   ArrowLeft,
   EyeIcon,
@@ -13,6 +14,7 @@ import React, { useState } from "react";
 import { motion } from "motion/react";
 import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 
 type propTypes = {
@@ -33,7 +35,7 @@ export default function RegisterForm({ previousStep }: propTypes) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading,setLoading] = useState(false);
-
+  const router = useRouter();
   // Function
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -171,7 +173,7 @@ export default function RegisterForm({ previousStep }: propTypes) {
         </button >
       </motion.form>
 
-      <p className="cursor-pointer text-gray-600 mt-6 text-sm flex items-center gap-1">Already have an account? <LogIn className="w-4 h-4"/> <span className="text-green-600">Sign in</span></p>
+      <p onClick={()=>router.push('/login')} className="cursor-pointer text-gray-600 mt-6 text-sm flex items-center gap-1">Already have an account? <LogIn className="w-4 h-4"/> <span className="text-green-600">Sign in</span></p>
     </div>
   );
 }
