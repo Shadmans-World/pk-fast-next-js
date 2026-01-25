@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { motion } from "motion/react";
 import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 
@@ -51,7 +51,7 @@ export default function RegisterForm({ previousStep }: propTypes) {
     try {
       const result = await axios.post('/api/auth/register',
         formData)
-      console.log(result.data)
+      router.push("/login")
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -60,7 +60,8 @@ export default function RegisterForm({ previousStep }: propTypes) {
   };
 
   const isDisabled = !name || !email || !password;
-
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get('callbackUrl')|| '/'
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-6 py-10 bg-white relative">
       
@@ -168,7 +169,7 @@ export default function RegisterForm({ previousStep }: propTypes) {
         </div>
 
         {/* Google */}
-        <button type="button" className="flex w-full items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200 cursor-pointer" onClick={()=>signIn("google")}>
+        <button type="button" className="flex w-full items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200 cursor-pointer" onClick={()=>signIn("google",{callbackUrl})}>
           <FcGoogle className="flex items-center rounded-full border border-gray-300 hover:bg-gray-50 w-10 h-10 "/>
           Continue with Google
         </button >

@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import { motion } from "motion/react";
 import { FcGoogle } from "react-icons/fc";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 
@@ -29,14 +29,17 @@ export default function Login() {
   const router = useRouter();
   
   const isDisabled = !email || !password;
-
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl') || '/';
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true)
     try {
       await signIn("credentials", {
         email,
-        password
+        password,
+        redirect:true,
+        callbackUrl
       });
       setLoading(false)
     } catch (error) {
@@ -127,7 +130,7 @@ export default function Login() {
 
         {/* Google */}
         <button
-        onClick={()=>signIn('google')}
+        onClick={()=>signIn('google',{callbackUrl})}
           type="button"
           className="flex w-full items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200 cursor-pointer"
         >
