@@ -15,6 +15,7 @@ import { motion } from "motion/react";
 import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 
 type propTypes = {
@@ -167,7 +168,7 @@ export default function RegisterForm({ previousStep }: propTypes) {
         </div>
 
         {/* Google */}
-        <button type="button" className="flex w-full items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200 cursor-pointer">
+        <button type="button" className="flex w-full items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200 cursor-pointer" onClick={()=>signIn("google")}>
           <FcGoogle className="flex items-center rounded-full border border-gray-300 hover:bg-gray-50 w-10 h-10 "/>
           Continue with Google
         </button >

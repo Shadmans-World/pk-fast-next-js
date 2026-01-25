@@ -127,6 +127,7 @@ export default function Login() {
 
         {/* Google */}
         <button
+        onClick={()=>signIn('google')}
           type="button"
           className="flex w-full items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200 cursor-pointer"
         >
