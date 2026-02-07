@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { motion } from "motion/react";
 import { ArrowRight, Bike, User, UserCog } from "lucide-react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 export default function EditRoleAndMobile() {
   const [roles, setRoles] = useState([
     { id: "admin", label: "Admin", icon: UserCog },
@@ -11,14 +12,15 @@ export default function EditRoleAndMobile() {
   ]);
   const [selectedRoles,setSelectedRoles] = useState("")
   const [mobiles,setMobiles] = useState("")
-
+  const router = useRouter();
   const handleEdit = async()=>{
     try {
         const result = await axios.post("/api/user/edit-role-mobile",{
             role:selectedRoles,
             mobile:mobiles
         })
-        console.log(result.data)
+        // console.log(result.data)
+        router.push('/')
     } catch (error) {
         console.error(error)
     }
