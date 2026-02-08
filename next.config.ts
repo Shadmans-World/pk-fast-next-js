@@ -5,7 +5,13 @@ images:{
   remotePatterns:[
     {
       hostname:'lh3.googleusercontent.com'
-    }
+    },
+    {
+      hostname:"foodinstitute.com"
+    },
+    {hostname:"plus.unsplash.com"},
+    {hostname:"images.unsplash.com"}
+
   ]
 }
 };

@@ -4,6 +4,9 @@ import connectDb from "../lib/db";
 import User from "../models/user.model";
 import EditRoleAndMobile from "../components/EditRoleAndMobile";
 import Navbar from "../components/Navbar";
+import UserDashboard from "../components/UserDashboard";
+import AdminDashboard from "../components/AdminDashboard";
+import DeliveryBoyDashboard from "../components/DeliveryBoyDashboard";
 
 export default async function Home() {
   await connectDb();
@@ -24,6 +27,11 @@ export default async function Home() {
   return (
     <>
     <Navbar user={plainUser}/>
+    {user.role == 'user'? (
+      <UserDashboard/>
+    ):user.role == 'admin'? (
+      <AdminDashboard/>
+    ): <DeliveryBoyDashboard/>}
     </>
   )
 }
