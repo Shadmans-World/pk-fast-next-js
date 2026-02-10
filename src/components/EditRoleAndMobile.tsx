@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { ArrowRight, Bike, User, UserCog } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 export default function EditRoleAndMobile() {
   const [roles, setRoles] = useState([
     { id: "admin", label: "Admin", icon: UserCog },
@@ -11,7 +12,8 @@ export default function EditRoleAndMobile() {
     { id: "deliveryBoy", label: "Delivery Boy", icon: Bike },
   ]);
   const [selectedRoles,setSelectedRoles] = useState("")
-  const [mobiles,setMobiles] = useState("")
+  const [mobiles,setMobiles] = useState("");
+  const {update,data} = useSession()
   const router = useRouter();
   const handleEdit = async()=>{
     try {
@@ -20,6 +22,7 @@ export default function EditRoleAndMobile() {
             mobile:mobiles
         })
         // console.log(result.data)
+        await update({role:"selectedROles"})
         router.push('/')
     } catch (error) {
         console.error(error)
