@@ -1,14 +1,19 @@
+
 import { auth } from "@/src/auth";
 import uploadOnCloudinary from "@/src/lib/cloudinary";
 import connectDb from "@/src/lib/db";
 import Grocery from "@/src/models/grocery.model";
 import { NextRequest, NextResponse } from "next/server";
 
+
+
 export async function POST(req:NextRequest) {
     try {
         await connectDb()
 
         const session = await auth()
+        console.log("SESSION:", session);
+
         if(session?.user?.role !== "admin"){
             return NextResponse.json(
                 {message:"You are not an ADMIN"},
