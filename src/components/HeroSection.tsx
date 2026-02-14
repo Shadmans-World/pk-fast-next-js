@@ -3,7 +3,11 @@ import React, { useEffect, useState } from "react";
 import { Leaf, Truck, Smartphone, ShoppingBasket } from "lucide-react";
 import { AnimatePresence,motion } from "motion/react";
 import Image from "next/image";
+
+
 export default function HeroSection() {
+
+  
   const slides = [
     {
       id: 1,

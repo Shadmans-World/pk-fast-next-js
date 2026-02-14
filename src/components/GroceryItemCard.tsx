@@ -1,15 +1,16 @@
 'use client'
-
-
 import React from 'react'
 import {motion} from "motion/react"
 import Image from 'next/image';
 import mongoose from 'mongoose';
-import { ShoppingCart } from 'lucide-react';
+import { Minus, Plus, ShoppingCart } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../redux/store';
+import { addToCart, decreaseQuantity, increaseQuantity } from '../redux/cartSlice';
 
 
 interface IGrocery {
-  _id?: mongoose.Types.ObjectId;
+  _id: mongoose.Types.ObjectId;
   name: string;
   category: string;
   price: string;
@@ -20,6 +21,12 @@ interface IGrocery {
 }
 
 export default function GroceryItemCard({item}:{item:IGrocery}) {
+  
+  const dispatch = useDispatch<AppDispatch>()
+  const {cartData} = useSelector((state:RootState)=>state.cart)
+
+  const cartItem = cartData.find((cart)=>cart._id=== item._id)
+
   return (
     <motion.div
     initial={{ opacity: 0, y: 50,scale:0.9}}
@@ -39,11 +46,23 @@ export default function GroceryItemCard({item}:{item:IGrocery}) {
                 <span className='text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded-full'>{item.unit}</span>
                 <span className='text-green-700 font-bold text-lg flex-center'><span className='text-sm font-extrabold'>৳</span>{item.price}</span>
             </div>
-            <motion.button className='flex-center mt-4 gap-2 bg-green-600 hover:bg-green-700 text-white rounded-full py-2 text-sm font-medium transition-all'
-            whileTap={{scale:0.96}}
+
+            {!cartItem ? <motion.button className='flex-center mt-4 gap-2 bg-green-600 hover:bg-green-700 text-white rounded-full py-2 text-sm font-medium transition-all'
+            whileTap={{scale:0.96}} onClick={()=>dispatch(addToCart({...item,quantity:1}))}
             >
                <ShoppingCart/> Add to Cart
-            </motion.button>
+            </motion.button> : 
+            <motion.div 
+            initial={{opacity:0, y:10}}
+            animate={{opacity:1, y:0}}
+            transition={{duration:0.3}}
+            className='mt-4 flex-center bg-green-50 border border-green-200 rounded-full py-2 px-4 gap-4'
+            >
+              <button className='w-7 h-7 flex-center rounded-full bg-green-100 hover:bg-green-200 transition-all' onClick={()=>dispatch(decreaseQuantity(cartItem._id))}><Minus size={16} className='text-green-700'/></button>
+              <span className='text-sm font-semibold text-gray-800'>{cartItem.quantity}</span>
+              <button className='w-7 h-7 flex-center rounded-full bg-green-100 hover:bg-green-200 transition-all' onClick={()=>dispatch(increaseQuantity(cartItem._id))}><Plus size={16} className='text-green-700'/></button>
+            </motion.div> }
+            
             </div>
     </motion.div>
   )
