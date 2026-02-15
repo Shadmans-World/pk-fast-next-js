@@ -1,0 +1,120 @@
+"use client";
+import { ArrowLeft, Minus, Plus, ShoppingBasket, Trash2 } from "lucide-react";
+import Link from "next/link";
+import React from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/src/redux/store";
+import Image from "next/image";
+import { decreaseQuantity, increaseQuantity, removeFromCart } from "@/src/redux/cartSlice";
+export default function CartPage() {
+  const { cartData,subTotal,finalTotal,deliveryFee } = useSelector((state: RootState) => state.cart);
+  const dispatch = useDispatch<AppDispatch>()
+  return (
+    <div className="w-[95%] sm:w-[90%] md:w-[80%] mx-auto mt-8 mb-24 relative">
+      <Link
+        href={"/"}
+        className="absolute -top-2 left-0 flex items-center gap-2 text-green-700 hover:text-green-800 font-medium transition-all"
+      >
+        <ArrowLeft size={20} />
+        <span className="hidden sm:inline">Back To Home</span>
+      </Link>
+
+      <motion.h2
+        className="text-2xl xm:text-3xl md:text-4xl font-bold text-green-700 text-center mb-10"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        🛒 Your Shopping Cart
+      </motion.h2>
+
+      {cartData.length == 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="text-center py-20 bg-white rounded-2xl shadow-md"
+        >
+          <ShoppingBasket className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <p className="text-gray-600 text-lg mb-6 ">
+            Your cart is empty. Add some groceries to continue shopping!
+          </p>
+          <Link
+            href={"/"}
+            className="bg-green-600 text-white px-6 py-3 hover:bg-green-700 rounded-full transition-all inline-block font-medium"
+          >
+            Continue Shopping
+          </Link>
+        </motion.div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-5">
+            <AnimatePresence>
+            {cartData.map((item, idx) => (
+              <motion.div
+                key={item._id.toString() || idx}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="flex col sm:flex-row items-center  bg-white rounded-2xl shadow-md p-5 hover:shadow-xl transition-all duration-300 border border-gray-100"
+              >
+                {/* Image */}
+                <div className="relative w-28 h-28 sm:w-24 sm:h-24 md:w-28 shrink-0 rounded-xl overflow-hidden bg-gray-50">
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    fill
+                    className="object-contain p-3 transition-transform duration-300 hover:scale-105"
+                  />
+                </div>
+                {/* Details of the cart */}
+                <div className="mt-4 sm:mt-0 sm:ml-4 flex-1 text-center sm:text-left">
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-800 line-clamp-1">{item.name}</h3>
+                  <p className="text-xs sm:text-sm text-gray-500 ">{item.unit}</p>
+                  <p className="text-green-700 font-bold mt-1 text-sm sm:text-base flex items-center justify-center sm:justify-start"><span className=" font-extrabold">৳</span>{Number(item.price) * item.quantity}</p>
+                </div>
+                {/* Quantity increase and decrease */}
+                <div className="flex-center sm:justify-end gap-3 mt-3 smLmt-0 bg-gray-50 px-3 py-2 rounded-full">
+                    <button className="bg-white p-1.5 rounded-full hover:bg-green-100 transition-all border border-gray-200" onClick={()=>dispatch(decreaseQuantity(item._id))} ><Minus className="text-green-700" size={16}/></button>
+                    <span className="font-semibold text-center text-gray-800 w-6">{item.quantity}</span>
+                    <button className="bg-white p-1.5 rounded-full hover:bg-green-100 transition-all border border-gray-200" onClick={()=>dispatch(increaseQuantity(item._id))}><Plus className="text-green-700" size={16}/></button>
+                </div>
+                <button className="sm:ml-4 mt-3  text-red-500 hover:text-red-700 transition-all" onClick={()=>dispatch(removeFromCart(item._id))} ><Trash2 size={18}/></button>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+          </div>
+          <motion.div
+          initial={{opacity:0, x:30}}
+          animate={{opacity:1, x:0}}
+          transition={{duration:0.3}}
+          className="bg-white rounded-2xl shadow-xl p-6 h-fit sticky top-24 border border-gray-100 flex col"
+          >
+            <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">Order Summary</h2>
+            <div className="space-y-3 text-gray-700 text-sm sm:text-base">
+              <div className="flex items-center justify-between">
+                <span>Subtotal</span>
+                <span className="text-green-700 font-semibold"><span className=" font-extrabold">৳</span>{subTotal}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Delivery Fee</span>
+                <span className="text-green-700 font-semibold"><span className=" font-extrabold">৳</span>{deliveryFee}</span>
+              </div>
+              <hr className="my-3"/>
+              <div className="flex items-center justify-between font-bold text-lg sm:text-xl">
+                <span>Total</span>
+                <span className="text-green-700 font-semibold"><span className=" font-extrabold">৳</span>{finalTotal}</span>
+              </div>
+            </div>
+            {/* CheckOut Button */}
+            <motion.button whileTap={{scale:0.95}} className="full mt-6 bg-green-600 text-white py-3 rounded-full hover:bg-green-700 transition-all font-semibold text-sm sm:text-base">
+              Proceed To Checkout
+            </motion.button>
+
+          </motion.div>
+        </div>
+      )}
+    </div>
+  );
+}
