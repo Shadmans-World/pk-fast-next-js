@@ -18,7 +18,7 @@ export default async function UserDashboard() {
         <h2 className="text-2xl md:text-3xl font-bold text-green-700 mb-6 text-center">Popular Grocery Items</h2>
         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6'>
           {plainGrocery.map((item: any) => (
-            <GroceryItemCard key={item._id} item={item} />
+            <GroceryItemCard key={item._id.toString()} item={item} />
           ))}
         </div>
       </div>

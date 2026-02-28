@@ -7,9 +7,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/src/redux/store";
 import Image from "next/image";
 import { decreaseQuantity, increaseQuantity, removeFromCart } from "@/src/redux/cartSlice";
+import { useRouter } from "next/navigation";
 export default function CartPage() {
   const { cartData,subTotal,finalTotal,deliveryFee } = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch<AppDispatch>()
+  const router = useRouter()
+
+  const handleProceedToCheckOut = () => {
+    router.push('/user/checkout')
+  }
   return (
     <div className="w-[95%] sm:w-[90%] md:w-[80%] mx-auto mt-8 mb-24 relative">
       <Link
@@ -66,6 +72,7 @@ export default function CartPage() {
                     alt={item.name}
                     fill
                     className="object-contain p-3 transition-transform duration-300 hover:scale-105"
+                    loading="eager" sizes='(max-width:768px) 100vw 25vw'
                   />
                 </div>
                 {/* Details of the cart */}
@@ -108,7 +115,7 @@ export default function CartPage() {
               </div>
             </div>
             {/* CheckOut Button */}
-            <motion.button whileTap={{scale:0.95}} className="full mt-6 bg-green-600 text-white py-3 rounded-full hover:bg-green-700 transition-all font-semibold text-sm sm:text-base">
+            <motion.button whileTap={{scale:0.95}} className="full mt-6 bg-green-600 text-white py-3 rounded-full hover:bg-green-700 transition-all font-semibold text-sm sm:text-base" onClick={handleProceedToCheckOut}>
               Proceed To Checkout
             </motion.button>
 
